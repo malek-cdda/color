@@ -4,4 +4,45 @@
 
 body {
   /* background-color: hsl(60, 100%, 50%); */
+  background: linear-gradient(
+    to right,
+    red,
+    rgba(94, 255, 0, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(94, 255, 0, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(94, 255, 0, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(94, 255, 0, 0.4),
+    rgba(255, 255, 0 0.4),
+    rgba(94, 255, 0, 0.4)
+  );
+}
+
+.s {
+  background: linear-gradient(
+    to right,
+    red,
+    rgba(94, 255, 0, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(94, 255, 0, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(94, 255, 0, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(20, 26, 255, 0.4),
+    rgba(255, 0, 0, 0.4),
+    rgba(94, 255, 0, 0.4),
+    rgba(94, 255, 0, 0.4)
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

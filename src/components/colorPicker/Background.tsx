@@ -1,51 +1,76 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { colorFnc, gradientPosition } from "./colorPickerData/color";
 
 const Background = () => {
-  //   const [color, setColor] = useState("#000000");
-
-  //   const [colorList, setColorList] = useState<string[]>(["red"]);
-  //   const [colorPosition, setColorPosition] = useState<string>("red");
-  //   let gradientStyle;
-  //   console.log(colorList.length);
-
-  //   const newColor = colorList.join(",");
-  //   const v = colorList.length == 1 ? `${newColor},${newColor}` : newColor;
-  //   console.log(v);
-  //   let t = "to right";
-  //   gradientStyle = {
-  //     background: `linear-gradient( ${t}, ${v} )`,
-  //     padding: "20px", // Add other styles as needed
-  //   };
-  //   console.log(colorList.join(","));
-  //   const handleAdd = (e: any) => {
-  //     setColorList([...colorList, "green"]);
-  //   };
   const [active, setActive] = useState(false);
   const [theme, setTheme] = useState(true);
   const [range, setRange] = useState<number>(0.4);
   const [colorList, setColorList] = useState<any>([]);
-  useEffect(() => {
-    // console.log(colorFnc(range));
-    let color = colorFnc(range);
-    setColorList(color);
-  }, [range]);
-  const handleRange = (e: any) => {
-    const inputValue = Number(e.target.value); // Assuming e.target.value is a string representing a number
-    const rangeFix = Number((Math.floor(inputValue / 10) * 0.1).toFixed(1));
-    setRange(rangeFix);
-    console.log(inputValue);
-  };
-  //   console.log(colorFnc(theme));
-  //   let color = colorFnc(range) ? colorFnc : [];
-  const [color, setColor] = useState<string>("red");
-  const handleColorChange = (color: string) => {
-    setColor(color);
-  };
+
   const [gradientPos, setGradientPos] = useState<string>("to left");
-  console.log(gradientPos);
+  const [colorAdd, setColorAdd] = useState<any>([]);
+  const [gradientStyle, setGradientStyle] = useState<any>({});
+
+  const handleAdd = (e: any) => {
+    let colors = colorFnc(range);
+    const rand = Math.floor(Math.random() * colors.length);
+    console.log(rand);
+    setColorAdd([...colorAdd, colors[rand].value]);
+  };
+
+  useEffect(() => {
+    const newColor = colorAdd.join(",");
+    const v = colorAdd.length == 1 ? `${newColor},${newColor}` : newColor;
+    console.log(v);
+    const newArr = {
+      background: `linear-gradient(${gradientPos}, ${v})`,
+      // Add other styles as needed
+    };
+    setGradientStyle(newArr);
+  }, [colorAdd, gradientPos]);
+  const [fixColor, setFixColor] = useState<any>();
+  const [toggle, setToggle] = useState<boolean>(false);
+  const handleAddedColor = (e: any) => {
+    if (fixColor == e) {
+      setToggle(!toggle);
+    } else {
+      setToggle(true);
+    }
+    setFixColor(e);
+  };
+  const handleAddedColors = (e: any) => {
+    // setFixColor(e);
+    // colorAdd[fixColor] = e;
+    const data = colorAdd.map((item: any, index: any) => {
+      return index == fixColor ? (item = e) : item;
+    });
+    setColorAdd(data);
+  };
+  const [textColor, setTextColor] = useState<boolean>(false);
+  const removeAllColor = () => {
+    setTextColor(!textColor);
+  };
+  console.log(textColor);
+  const handleAddedColorRemove = (idx: any) => {
+    const data = colorAdd.filter((item: any, index: any) => index !== idx);
+    setToggle(false);
+    setColorAdd(data);
+  };
   return (
     <div className="w-80 shadow-md p-5 mt-32 ">
+      <h1
+        style={
+          textColor
+            ? {
+                ...gradientStyle,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }
+            : gradientStyle
+        }
+        className="w-[200px] h-32 ">
+        welcome my home {textColor.toString()}
+      </h1>
       <div className="flex justify-between py-5">
         <span>Gradient</span>
         <select
@@ -58,59 +83,43 @@ const Background = () => {
           ))}
         </select>
       </div>
-      <div className="flex ">
-        <span className="w-1/2"> color</span>
-        <div className="w-1/2 relative flex  items-center space-x-2">
-          <button
-            className="w-6 h-6 rounded-full  "
-            onClick={() => setActive(!active)}
-            style={{ backgroundColor: color }}></button>
-          <input
-            type="text"
-            defaultValue={color}
-            className="w-3/4 border rounded-md"
-            onChange={(e) => {
-              setColor(e.target.value);
-            }}
-          />
-          <div
-            className={` ${
-              active ? "block" : "hidden"
-            } absolute bottom-8  border shadow-md  rounded-md py-1`}>
-            <div className="flex justify-between px-1">
+      <div>
+        {colorAdd.map((item: any, index: any) => (
+          <div key={index}>
+            <button
+              className="w-6 h-6 rounded-full mx-1"
+              style={{ background: item }}
+              onClick={() => handleAddedColor(index)}></button>
+            {!index == 0 && (
               <button
-                className="   bg-red-900 text-sm rounded-lg px-1 text-white "
-                onClick={() => setTheme(true)}>
-                theme
+                className="w-6 h-6 rounded-full mx-1"
+                onClick={() => handleAddedColorRemove(index)}>
+                x
               </button>
-
-              <input
-                type="color"
-                className="w-6 h-6 border rounded-full  "
-                onChange={(e) => setColor(e.target.value)}
-              />
-            </div>
-            {theme && (
-              <div>
-                {colorList?.map((color: any, index: any) => (
-                  <button
-                    key={index}
-                    className="h-6 w-6 rounded-full mx-2"
-                    style={{ backgroundColor: color.value }}
-                    onClick={() => handleColorChange(color.value)}></button>
-                ))}
-                <>
-                  <input
-                    type="range"
-                    max={100}
-                    min={10}
-                    onChange={(e) => handleRange(e)}
-                  />
-                </>
-              </div>
             )}
           </div>
+        ))}
+      </div>
+      <h1>selecte color from here</h1>
+      {toggle && (
+        <div>
+          {colorFnc(".5").map((item: any, index: any) => (
+            <button
+              className="w-6 h-6 rounded-full mx-1"
+              style={{ background: item.value }}
+              key={index}
+              onClick={() => handleAddedColors(item.value)}></button>
+          ))}
+          <input
+            type="color"
+            onChange={(e) => handleAddedColors(e.target.value)}
+          />
         </div>
+      )}
+
+      <button onClick={handleAdd}>+Add</button>
+      <div>
+        <button onClick={() => removeAllColor()}>remove</button>
       </div>
     </div>
   );

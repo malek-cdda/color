@@ -19,11 +19,11 @@ export const colorFnc = (e: any) => {
     },
     {
       name: "color",
-      value: `rgba(0, 255, 0 ${e})`,
+      value: `rgba(0, 255, 0, ${e})`,
     },
     {
       name: "color",
-      value: `rgba(255, 255, 0 ${e})`,
+      value: `rgba(255, 255, 0, ${e})`,
     },
     {
       name: "color",
@@ -59,5 +59,17 @@ export const gradientPosition = [
   },
   {
     name: "to bottom left",
+  },
+  {
+    name: "45deg",
+  },
+  {
+    name: "135deg",
+  },
+  {
+    name: "225deg",
+  },
+  {
+    name: "315deg",
   },
 ];
