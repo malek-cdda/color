@@ -8,6 +8,7 @@ const Theme = ({ colorFnc, handleColorChanges }: any) => {
   useEffect(() => {
     setColorList(colorFnc(range));
   }, [range, colorFnc]);
+  //   change color opacity using range value
   const handleRange = (e: any) => {
     const inputValue = Number(e.target.value);
     const rangeFix = Number((Math.floor(inputValue / 10) * 0.1).toFixed(1));
@@ -15,7 +16,7 @@ const Theme = ({ colorFnc, handleColorChanges }: any) => {
   };
 
   return (
-    <div className="flex flex-col bg-black px-5 py-3 rounded-lg gap-2 absolute bottom-8 z-10 ">
+    <div className="flex flex-col bg-black px-5 py-3 rounded-lg gap-2 absolute left-0 bottom-8 z-10 ">
       <div className="flex justify-between px-1">
         <button
           className="   bg-red-900 text-sm rounded-lg px-1 text-white "

@@ -1,5 +1,4 @@
 export const colorFnc = (e: any) => {
-  console.log(e);
   return [
     {
       name: "color",

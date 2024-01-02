@@ -1,16 +1,16 @@
-import React, { use, useEffect, useState } from "react";
-import { colorFnc, gradientPosition } from "./colorPickerData/color";
-import Theme from "./theme/Theme";
-
-const Background = () => {
+import { useEffect, useState } from "react";
+// import { colorFnc, gradientPosition } from "../colorPickerData/color";
+import Theme from "./Theme";
+const Background = ({ initialColor, colorFnc, gradientPosition }: any) => {
   const [gradientPos, setGradientPos] = useState<string>("to left");
-  const [colorAdd, setColorAdd] = useState<any>([]);
+  const [colorAdd, setColorAdd] = useState<any>([initialColor]);
   const [gradientStyle, setGradientStyle] = useState<any>({});
   const [textColor, setTextColor] = useState<boolean>(false);
   const [fixColor, setFixColor] = useState<any>();
   const [openChooseColor, setOpenChooseColor] = useState<number | null>(null);
   const [gradientColorPos, setGradientColorPos] =
     useState<string>("linear-gradient");
+  const [preview, setPreview] = useState<any>(false);
   // added color to background function
   const handleAdd = (e: any) => {
     let colors = colorFnc(1);
@@ -22,12 +22,22 @@ const Background = () => {
     const newColor = colorAdd.join(",");
     const colorAdded =
       colorAdd.length == 1 ? `${newColor},${newColor}` : newColor;
-    const newArr = {
-      background: `${gradientColorPos}(${gradientPos}, ${colorAdded})`,
-      // Add other styles as needed
-    };
+    let newArr;
+
+    if (gradientColorPos === "normal") {
+      console.log(colorAdd);
+      newArr = {
+        background: fixColor ? colorAdd[fixColor] : colorAdd[0],
+        // Add other styles as needed
+      };
+    } else {
+      newArr = {
+        background: `${gradientColorPos}(${gradientPos}, ${colorAdded})`,
+        // Add other styles as needed
+      };
+    }
     setGradientStyle(newArr);
-  }, [colorAdd, gradientPos, gradientColorPos]);
+  }, [colorAdd, gradientPos, gradientColorPos, fixColor]);
 
   //  open popup to choose your color
   const handleAddedColor = (e: any) => {
@@ -55,36 +65,59 @@ const Background = () => {
     );
     setGradientColorPos(e.target.value);
   };
+  const [toggle, setToggle] = useState<boolean>(false);
   return (
-    <div className="w-80 shadow-md p-5 mt-32 ">
-      <h1
-        style={
-          textColor
-            ? {
-                ...gradientStyle,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+    <div className="   relative flex justify-center ">
+      {toggle && (
+        <div className="w-80 shadow-md p-5 mt-10  ">
+          {preview && (
+            <h1
+              style={
+                textColor
+                  ? {
+                      ...gradientStyle,
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }
+                  : gradientStyle
               }
-            : gradientStyle
-        }
-        className="w-[200px] h-32 "></h1>
-      {/* selece gradient item  */}
-      <GradientItem handleGradientItem={handleGradientItem} />
-      {/* slect your gradient position  */}
-      <GradientPosition
-        setGradientPos={setGradientPos}
-        gradientColorPos={gradientColorPos}
-      />
-      {/* added color to background  */}
-      <ColorAdded
-        colorAdd={colorAdd}
-        handleAddedColor={handleAddedColor}
-        handleColorChanges={handleColorChanges}
-        handleAddedColorRemove={handleAddedColorRemove}
-        openChooseColor={openChooseColor}
-        colorFnc={colorFnc}
-      />
-      <button onClick={handleAdd}>+Add</button>
+              className="w-full h-6 my-5 rounded-md "></h1>
+          )}
+          {/* selece gradient item  */}
+          <div className="flex justify-between">
+            <GradientItem handleGradientItem={handleGradientItem} />
+            <button
+              className="bg-blue-300 px-3 py-1 rounded-md hover:bg-blue-400"
+              onClick={() => {
+                setPreview(!preview);
+              }}>
+              preview
+            </button>
+          </div>
+          {/* slect your gradient position  */}
+          <GradientPosition
+            setGradientPos={setGradientPos}
+            gradientColorPos={gradientColorPos}
+            gradientPosition={gradientPosition}
+          />
+          {/* added color to background  */}
+          <ColorAdded
+            colorAdd={colorAdd}
+            handleAddedColor={handleAddedColor}
+            handleColorChanges={handleColorChanges}
+            handleAddedColorRemove={handleAddedColorRemove}
+            openChooseColor={openChooseColor}
+            colorFnc={colorFnc}
+          />
+          <button onClick={handleAdd}>+Add</button>
+        </div>
+      )}
+      <div>
+        <button
+          className={`h-6 w-6 left-1/2 top-0 absolute  bg-[${initialColor}]  rounded-full block`}
+          style={{ background: initialColor }}
+          onClick={() => setToggle(!toggle)}></button>
+      </div>
     </div>
   );
 };
@@ -98,15 +131,18 @@ const GradientItem = ({ handleGradientItem }: any) => {
   return (
     <div>
       <select className="border" onChange={(e) => handleGradientItem(e)}>
-        {["linear-gradient", "radial-gradient"].map((item: any, index: any) => (
-          <option key={index} value={item}>
-            {item}
-          </option>
-        ))}
+        {["linear-gradient", "radial-gradient", "normal"].map(
+          (item: any, index: any) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
+          )
+        )}
       </select>
     </div>
   );
 };
+// color added here
 const ColorAdded = ({
   colorAdd,
   handleAddedColor,
@@ -117,9 +153,10 @@ const ColorAdded = ({
 }: any) => {
   return (
     <div>
-      {colorAdd.map((item: any, index: any) => (
-        <div key={index} className="relative">
+      {colorAdd.map((item: any, index: number) => (
+        <div key={index} className="relative flex items-center gap-1 py-1  ">
           {/* <span className="bg-red-900 ">{item}</span> */}
+
           <button
             className="w-6 h-6 rounded-full mx-1"
             style={{ background: item }}
@@ -127,15 +164,17 @@ const ColorAdded = ({
           <input
             onChange={(e) => handleColorChanges(e.target.value)}
             value={item}
-            className="w-1/2"
+            className="w-1/2 border rounded-md px-2"
           />
-          {!index == 0 && (
+
+          {!(index === 0) && (
             <button
-              className="w-6 h-6 rounded-full mx-1"
+              className="w-6 h-6 rounded-full   hover:bg-gray-300/60"
               onClick={() => handleAddedColorRemove(index)}>
               x
             </button>
           )}
+          {/* {console.log(!index == 0, index)} */}
           <div>
             {" "}
             {/*   open popup to choose your color */}
@@ -151,16 +190,19 @@ const ColorAdded = ({
     </div>
   );
 };
-
-const GradientPosition = ({ setGradientPos, gradientColorPos }: any) => {
+// gradient position here
+const GradientPosition = ({
+  setGradientPos,
+  gradientColorPos,
+  gradientPosition,
+}: any) => {
   return (
     <div className="flex justify-between py-5">
       <span>Gradient</span>
       <select
         className="border"
         onChange={(e) => setGradientPos(e.target.value)}>
-        {gradientPosition.map((item: any, index: any) => {
-          console.log(item);
+        {gradientPosition?.map((item: any, index: any) => {
           let data =
             gradientColorPos === "radial-gradient" ? item.rName : item.name;
           return (
