@@ -38,38 +38,34 @@ export const colorFnc = (e: any) => {
 export const gradientPosition = [
   {
     name: "to right",
+    rName: "circle at center",
   },
   {
     name: "to left",
+    rName: "circle at top",
   },
   {
     name: "to top",
+    rName: "circle at right",
   },
   {
     name: "to bottom",
+    rName: "circle at bottom",
   },
   {
     name: "to top right",
+    rName: "circle at left",
   },
   {
     name: "to top left",
+    rName: "circle at top left",
   },
   {
     name: "to bottom right",
+    rName: "circle at top right",
   },
   {
     name: "to bottom left",
-  },
-  {
-    name: "45deg",
-  },
-  {
-    name: "135deg",
-  },
-  {
-    name: "225deg",
-  },
-  {
-    name: "315deg",
+    rName: "circle at bottom left",
   },
 ];

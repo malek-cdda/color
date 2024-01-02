@@ -34,7 +34,7 @@ const Color = () => {
             style={{ backgroundColor: color }}></button>
           <input
             type="text"
-            defaultValue={color}
+            value={color}
             className="w-3/4 border rounded-md"
             onChange={(e) => {
               setColor(e.target.value);
