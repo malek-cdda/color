@@ -32,11 +32,7 @@ const Background = () => {
   //  open popup to choose your color
   const handleAddedColor = (e: any) => {
     setFixColor(e);
-    if (e === openChooseColor) {
-      setOpenChooseColor(null);
-    } else {
-      setOpenChooseColor(e);
-    }
+    e === openChooseColor ? setOpenChooseColor(null) : setOpenChooseColor(e);
   };
   // change your choose  color from popup
   const handleColorChanges = (e: any) => {
@@ -51,8 +47,7 @@ const Background = () => {
     const data = colorAdd.filter((item: any, index: any) => index !== idx);
     setColorAdd(data);
   };
-  console.log(gradientColorPos);
-  console.log(gradientStyle);
+
   // set graident item here
   const handleGradientItem = (e: any) => {
     setGradientPos(
@@ -74,17 +69,7 @@ const Background = () => {
         }
         className="w-[200px] h-32 "></h1>
       {/* selece gradient item  */}
-      <div>
-        <select className="border" onChange={(e) => handleGradientItem(e)}>
-          {["linear-gradient", "radial-gradient"].map(
-            (item: any, index: any) => (
-              <option key={index} value={item}>
-                {item}
-              </option>
-            )
-          )}
-        </select>
-      </div>
+      <GradientItem handleGradientItem={handleGradientItem} />
       {/* slect your gradient position  */}
       <GradientPosition
         setGradientPos={setGradientPos}
@@ -105,6 +90,23 @@ const Background = () => {
 };
 
 export default Background;
+// type func = {
+//   handleGradientItem: (e: any) => void;
+
+// }
+const GradientItem = ({ handleGradientItem }: any) => {
+  return (
+    <div>
+      <select className="border" onChange={(e) => handleGradientItem(e)}>
+        {["linear-gradient", "radial-gradient"].map((item: any, index: any) => (
+          <option key={index} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
 const ColorAdded = ({
   colorAdd,
   handleAddedColor,
@@ -149,6 +151,7 @@ const ColorAdded = ({
     </div>
   );
 };
+
 const GradientPosition = ({ setGradientPos, gradientColorPos }: any) => {
   return (
     <div className="flex justify-between py-5">
@@ -170,9 +173,3 @@ const GradientPosition = ({ setGradientPos, gradientColorPos }: any) => {
     </div>
   );
 };
-
-{
-  /* <option key={index} value={item.name}>
-{item.name}
-</option> */
-}
