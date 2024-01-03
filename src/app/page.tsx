@@ -4,7 +4,7 @@ import ColorPicker from "@/components/colorPicker/ColorPicker";
 
 export default function Home() {
   return (
-    <main className=" ">
+    <main className=" flex justify-center">
       <ColorPicker />
     </main>
   );

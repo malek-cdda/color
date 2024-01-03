@@ -5,5 +5,22 @@
 body {
   /* background-color: hsl(60, 100%, 50%); */
 }
-p {
+
+#style1 {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+#style1::-webkit-color-swatch {
+  border-radius: 15px;
+  border: none;
+}
+#style1::-moz-color-swatch {
+  border-radius: 15px;
+  border: none;
 }
